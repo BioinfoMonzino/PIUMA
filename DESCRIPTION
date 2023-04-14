@@ -1,0 +1,24 @@
+Package: PIUMA
+Type: Package
+Title: Phenotypes Identification Using Mapper from topological data 
+     Analysis(PIUMA)
+Version: 0.1.0
+Author: Mattia Chiesa <mattia.chiesa@cardiologicomonzino.it>,
+        Luca Piacentini <luca.piacentini@cardiologicomonzino.it>,
+		Laura Ballarini <laura.ballarini01@universitadipavia.it>
+Maintainer: Mattia Chiesa <mattia.chiesa@cardiologicomonzino.it>
+Description: The DaMiRseq package offers a tidy pipeline of data mining
+        procedures to identify transcriptional biomarkers and exploit 
+		them for both binary and multi-class classification purposes.
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+biocViews: Clustering, GraphAndNetwork, DimensionReduction, Network,
+     Classification
+VignetteBuilder: knitr
+Imports: cluster, umap, tsne, kernlab, vegan, dbscan, igraph, scales,
+    Hmisc, patchwork
+Suggests: BiocStyle, knitr, testthat
+Depends: R (>= 4.2), ggplot2
+RoxygenNote: 7.2.3
+

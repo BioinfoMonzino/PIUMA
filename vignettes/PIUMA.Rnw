@@ -1,0 +1,92 @@
+%\VignetteIndexEntry{Phenotypes Identification Using Mapper from topological data Analysis}
+%\VignettePackage{PIUMA}
+%\VignetteEngine{knitr::knitr}
+
+% To compile this document
+% library(tools)
+% library(BiocStyle)
+% library(devtools)
+% library(knitr)
+% setwd("./vignettes/")
+
+% unlink(c("cache","figure","*.bst","*.sty","*.R","*.tex","*.log","*.aux","*.out","PIUMA.pdf","*.toc","*.blg","*.bbl"),recursive = T); Rcmd("Sweave --engine=knitr::knitr --pdf PIUMA.Rnw")
+% devtools::build_vignettes()
+% tools::compactPDF("../inst/doc/PIUMA.pdf",gs_quality = "ebook")
+
+\documentclass{article}
+
+<<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex(relative.path = TRUE)
+@
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{subfig}% for combining multiple plots in one figure
+\usepackage[section]{placeins}
+\usepackage{amsmath}
+
+\newcommand{\piuma}{\textit{PIUMA}}
+
+<<knitr, echo=FALSE, results="hide">>=
+library("knitr")
+opts_chunk$set(
+  tidy=FALSE,
+  dev="png",
+  fig.show="hide",
+#  fig.width=4, fig.height=4.5,
+  fig.width=10, fig.height=8,
+  fig.pos="tbh",
+  cache=TRUE,
+  message=FALSE)
+@
+
+
+\author{Mattia Chiesa}
+\author{Laura Ballarini}
+%\author{Luca Piacentini}
+
+
+\affil{Bioinformatics and Aritificila Intelligence facility, Centro Cardiologico Monzino, IRCCS, Milan, Italy;}
+
+\bioctitle{The PIUMA package - Phenotypes Identification Using Mapper from topological data Analysis}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+ RNA-Seq is increasingly the method of choice for researchers studying the transcriptome. The strategies to analyze such complex high-dimensional data rely on data mining and statistical learning techniques. The \damir{} package offers a tidy pipeline that includes data mining procedures for data handling and implementation of prediction learning methods to build classification models. The package accepts any kind of data presented as a table of raw counts and allows the inclusion of variables that occur with the experimental setting. A series of functions enables data cleaning by filtering genomic features and samples, data adjustment by identifying and removing the unwanted source of variation (\textit{i.e.} batches and confounding factors) and to select the best predictors for modeling. Finally, a ``Stacking'' ensemble learning technique is applied to build a robust classification model. Every step includes a checkpoint for assessing the effects of data management using diagnostic plots, such as clustering and heatmaps, RLE boxplots, MDS or correlation plots.
+\end{abstract}
+
+\packageVersion{\Sexpr{BiocStyle::pkg_ver("PIUMA")}}
+
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction} \label{intro}
+RNA-Seq is a powerful high-throughput assay that uses next-generation sequencing (NGS) technologies to profile, discover and quantify RNAs. The whole collection of RNAs defines the transcriptome, whose plasticity, allows the researcher to capture important biological information: the transcriptome, in fact, is sensitive to changes occurring in response to environmental challenges, different healthy/disease state or specific genetic/epigenetic context.
+
+  <<chu_1, dev="pdf">>=
+  library(PIUMA)
+  data(vascEC_norm)
+  data(vascEC_meta)
+  @
+
+
+\section{Session Info}
+<<sessInfo, results="asis", echo=FALSE>>=
+toLatex(sessionInfo())
+@
+
+\bibliography{library}
+
+\end{document}
+
+
+
+
+
