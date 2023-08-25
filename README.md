@@ -12,4 +12,4 @@ devtools::install_github(BioinfoMonzino/PIUMA)
 ```
 
 ## Authors
-Laura Ballarini and Mattia Chiesa
+Mattia Chiesa, Laura Ballarini and Luca Piacentini
