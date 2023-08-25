@@ -13,7 +13,6 @@
 #' @return A list containing:
 #' \itemize{
 #'   \item A data.frame of original data (without outcomes).
-#'   \item A data.frame of standardized data (without outcomes)
 #'   \item A data.frame of re-scaled data (without outcomes)
 #'   \item A data.frame of original outcomes.
 #'   \item A data.frame of original outcomes converted as numeric.
@@ -39,10 +38,7 @@ importSplitScale <- function(df, outcomes) {
 
   '%!in%' <- function(x,y)!('%in%'(x,y))
 
-  ## Convert characters to factors
-  df <- as.data.frame(unclass(df),
-                      stringsAsFactors=TRUE,
-                      row.names = rownames(df))
+
 
   # checks----------------------------------------------------------------------
 
@@ -61,7 +57,10 @@ importSplitScale <- function(df, outcomes) {
   if (!is.character(outcomes))
     stop("'outcomes' argument must be a string")
 
-
+  ## Convert characters to factors
+  df <- as.data.frame(unclass(df),
+                      stringsAsFactors=TRUE,
+                      row.names = rownames(df))
   # specific checks
   if (dim(df)[1] <= 10)
     stop("The n. of 'df' rows must be greater than 10")
@@ -116,16 +115,13 @@ importSplitScale <- function(df, outcomes) {
     dfScaled_int <- df_int
     for(i in seq_len(ncol(df_int))){
       dfScaled_int[,i] <- scaleData_01(df_int[,i])
-
-
-
     }
   }
 
   ## handle factorial feats
   if(length(indFact) !=0){
-    cat("Binary variables will be converted to 0/1.
-Categorical var will be converted to integer based on alphabetic order")
+#  cat("Binary variables will be converted to 0/1.
+#  Categorical var will be converted to integer based on alphabetic order")
 
     df_fact <- df[, indFact, drop=FALSE]
     df_fact_num <- as.data.frame(sapply(df_fact, as.numeric)) -1
@@ -145,16 +141,18 @@ Categorical var will be converted to integer based on alphabetic order")
     }
     colnames(dfStd_fact_num) <- colnames(df_fact_num)
 
+    df_new <- cbind(df_fact_num, df_int)
+    dfScaled01 <- cbind(dfScaled_fact_num, dfScaled_int)
+    dfStdized <- cbind(dfStd_fact_num, dfStd_int)
+
   }else{
     df_fact <- c()
     cat("There are no factorial variables in 'df' \n")
+
+    df_new <- df_int
+    dfScaled01 <-  dfScaled_int
+    dfStdized <- dfStd_int
   }
-
-  ###### Merge datasets
-  df_new <- cbind(df_fact_num, df_int)
-  dfScaled01 <- cbind(dfScaled_fact_num, dfScaled_int)
-  dfStdized <- cbind(dfStd_fact_num, dfStd_int)
-
 
   df_new_out <- df_new[,which(colnames(df_new) %in% outcomes), drop=FALSE]
 
@@ -168,10 +166,12 @@ Categorical var will be converted to integer based on alphabetic order")
   retDfList <- list()
   retDfList[['data_real']] <- dfPred
   retDfList[['data_scaled01']] <- dfPredScaled01
-  retDfList[['data_stdized']] <- dfPredStdized
+  #retDfList[['data_stdized']] <- dfPredStdized
   retDfList[['outcome']] <- df_new_out
+  
+  if(length(indFact) !=0){
   retDfList[['outcomeFact']] <- df[,which(colnames(df) %in% outcomes),
                                    drop=FALSE]
-
+  }
   return (retDfList)
 }

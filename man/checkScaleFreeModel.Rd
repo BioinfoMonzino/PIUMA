@@ -4,47 +4,38 @@
 \alias{checkScaleFreeModel}
 \title{Assessment of Scale-Free model fitting}
 \usage{
-checkScaleFreeModel(jaccIndexes, showPlot = c("log", "linear", "null"))
+checkScaleFreeModel(jaccIndexes, showPlot = c("yes", "no"))
 }
 \arguments{
 \item{jaccIndexes}{A matrix of the Jaccard indexes between pair of nodes.}
 
-\item{showPlot}{A string indicating the type of plot to be shown.
-Only: "log", "linear" and "null" values are allowed. Each graph represent
-the degree distribution p(k) and the average clustering coefficient of all
-nodes (jaccIndexes rows/cols) with k links C(k).
-"log": graphs are shown in logarithmic scale;
-"linear": graphs are shown in the linear scale;
-"null": graphs are not shown. Default: "log".}
+\item{showPlot}{A string indicating whether the plot has to be 
+generated or not. Only 'yes' (default) or 'no' are allowed}
 }
 \value{
 A list containing:
 \itemize{
-   \item The average path length.
-   \item The number of network nodes.
+   \item the estimated gamma value
+   \item The correlation between the k and the degree distribution p(k).
+   \item The p-value of the correlation between the k and the degree 
+   distribution p(k).
    \item The correlation between the logarithm (base 10) of k and the
    logarithm (base 10) of the degree distribution p(k).
    \item The p-value of the correlation between the logarithm (base 10) of k
    and the logarithm (base 10) of the degree distribution p(k).
-   \item The global transitivity (i.e. global clustering coefficient).
-   \item The correlation between the logarithm (base 10) of k
-   and the logarithm (base 10) of the average clustering coefficient
-   of all nodes with k links C(k).
-   \item The p-value of the correlation between the logarithm (base 10) of k
-   and the logarithm (base 10) of the average clustering coefficient
-   of all nodes with k links C(k).
    }
 }
 \description{
 This function assesses the fitting to a scale-free net model.
 }
 \details{
-The scale-free networks show a high negative correlation beween k
+The scale-free networks show a high negative correlation beween k 
+and p(k).
 }
 \examples{
 ## use example data:
 data(jacc_mat_tda)
-netModel <- checkScaleFreeModel(jacc_mat_tda, "null")
+netModel <- checkScaleFreeModel(jacc_mat_tda, "no")
 
 }
 \seealso{

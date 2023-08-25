@@ -277,7 +277,7 @@ dfToProjection <- function(df,
     vectNumComp <- seq_len(nComp)
     s <- paste0("comp", vectNumComp, " = ", explVar[1:nComp], "%",
                 collapse=", ")
-    s <- strsplit(s, split=", ", fixed=T)
+    s <- strsplit(s, split=", ", fixed=TRUE)
     cat("PCA explained variance: ", unlist(s), sep="\n")
 
   },"UMAP"={
@@ -285,7 +285,7 @@ dfToProjection <- function(df,
     # create a new settings object
     custom.settings <- umap.defaults
     custom.settings$n_neighbors <- umapNNeigh
-    custom.settings$n_components = nComp
+    custom.settings$n_components <- nComp
     custom.settings$input <- "data"
     custom.settings$min_dist <- umapMinDist
 

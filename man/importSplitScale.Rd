@@ -17,7 +17,6 @@ that have to be considered 'outcomes'}
 A list containing:
 \itemize{
   \item A data.frame of original data (without outcomes).
-  \item A data.frame of standardized data (without outcomes)
   \item A data.frame of re-scaled data (without outcomes)
   \item A data.frame of original outcomes.
   \item A data.frame of original outcomes converted as numeric.

@@ -53,11 +53,11 @@ tdaDfEnrichment <- function(dfMapper, df){
   if (!all(vapply(dfMapper, class, FUN.VALUE=character(1)) %in% "character"))
     stop("'dfMapper' elements must be of type 'character'")
 
-  if (dim(df)[1] < 10)
-    stop("n. of 'df' rows must greater than 10")
+#  if (dim(df)[1] < 10)
+#    stop("n. of 'df' rows must greater than 10")
 
-  if (dim(df)[2] < 2)
-    stop("n. of 'df' columns must be greater than 2")
+#  if (dim(df)[2] < 2)
+#    stop("n. of 'df' columns must be greater than 2")
 
   if (!all(vapply(df, class, FUN.VALUE=character(1)) %in%
                                                      c("numeric", "integer")))

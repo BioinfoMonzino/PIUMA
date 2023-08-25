@@ -1,4 +1,4 @@
 citEntry(entry="article",
-         title = "DaMiRseq - an R/Bioconductor package for data mining of
-         RNA-Seq data: normalization, feature selection and classification",
+         textVersion = "PIUMA: Phenotypes Identification Using Mapper from
+		 topological data Analysis",
         )

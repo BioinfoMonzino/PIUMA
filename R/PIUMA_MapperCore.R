@@ -296,7 +296,8 @@ mapperCore <- function (dfDistances, df2Dlens, nBins=15, overlap=0.4,
   # remove empty nodes----------------------------------------------------------
   if (remEmptyNode==TRUE) {
     '%!in%' <- function(x,y)!('%in%'(x,y))
-    pointsInNodeDf <- pointsInNodeDf[which(pointsInNodeDf[,1] %!in% ""),,drop=F]
+    pointsInNodeDf <- pointsInNodeDf[which(pointsInNodeDf[,1] %!in% ""),,
+                                     drop=FALSE]
   }
 
   return(pointsInNodeDf)
