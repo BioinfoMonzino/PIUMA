@@ -14,5 +14,6 @@ install.packages("devtools")
 devtools::install_github("BioinfoMonzino/PIUMA")
 ```
 
-## Authors
+
 Mattia Chiesa, Laura Ballerini, Alessia Gerbasi, Giuseppe Albi, Arianna Dagliati and Luca Piacentini
+
