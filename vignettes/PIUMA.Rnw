@@ -9,7 +9,16 @@
 % library(knitr)
 % setwd("./vignettes/")
 
+% put the custom Biconductor.sty in vignette folder and then launch
+% unlink(c("cache","figure","*.bst","*.R","*.tex","*.log","*.aux","*.out","PIUMA.pdf","*.toc","*.blg","*.bbl"),recursive = T); Rcmd("Sweave --engine=knitr::knitr --pdf PIUMA.Rnw")
+
+
+
+% don't use it for PIUMA!!!
 % unlink(c("cache","figure","*.bst","*.sty","*.R","*.tex","*.log","*.aux","*.out","PIUMA.pdf","*.toc","*.blg","*.bbl"),recursive = T); Rcmd("Sweave --engine=knitr::knitr --pdf PIUMA.Rnw")
+
+
+
 % devtools::build_vignettes()
 % tools::compactPDF("../inst/doc/PIUMA.pdf",gs_quality = "ebook")
 
@@ -41,15 +50,17 @@ opts_chunk$set(
 @
 
 
+\author[1]{Mattia Chiesa}
+\author[1,2]{Laura Ballarini}
+\author[2]{Alessia Gerbasi}
+\author[2]{Giuseppe Albi}
+\author[2]{Arianna Dagliati}
+\author[1]{Luca Piacentini}
+
+\affil[1]{Bioinformatics and Aritificial Intelligence facility, Centro Cardiologico Monzino, IRCCS, Milan, Italy}
+\affil[2]{Dipartimento di Ingegneria Industrale e dell'Informazione, Universita' degli studi di Pavia, Pavia, Italy}
 
 
-
-\author{Mattia Chiesa}
-\author{Laura Ballarini}
-\author{Luca Piacentini}
-
-
-\affil{Bioinformatics and Aritificial Intelligence facility, Centro Cardiologico Monzino, IRCCS, Milan, Italy;}
 
 \bioctitle{The PIUMA package - Phenotypes Identification Using Mapper from topological data Analysis}
 
@@ -68,7 +79,7 @@ opts_chunk$set(
 
 
 \begin{abstract}
-We present \piuma, a package that allow implementing custom and robust Topological Data Analyses (TDA) in order to identify and characterize communities of samples in high and heterogeneous dimensional data.
+We present \piuma, a package for implementing custom and robust Topological Data Analyses (TDA), to identify and characterize communities of samples in high and heterogeneous dimensional data.
 
 \end{abstract}
 
@@ -82,8 +93,8 @@ We present \piuma, a package that allow implementing custom and robust Topologic
 \newpage
 
 \section{Topological Data Analysis for Phenotyping} \label{intro}
-Phenotyping is a process of characterizing and classifying individuals based on observable traits or phenotypic characteristics. In the context of medicine and biology, phenotyping involves the systematic analysis and measurement of various physical, physiological, and behavioral features of individuals, such as height, weight, blood pressure, biochemical markers, imaging data, and more. Phenotyping plays a crucial role in precision medicine as it provides essential data for understanding individual health characteristics and disease manifestations, by combining data from different sources to gain comprehensive insights into an individual's health status and disease risk. This integrated approach allows for more accurate disease diagnosis, prognosis, and treatment selection. Phenotyping also extends to the field of computational biology and bioinformatics, where machine learning algorithms and data analytics are employed to identify patterns and associations between phenotypic traits and a huge amount of available features. These analyses can uncover novel disease subtypes, identify predictive markers, and facilitate the development of personalized treatment strategies.\\
-In this context, the application of unsupervised learning methodologies could help the identification of specific phenotypes in in huge heterogeneous cohorts, such as clinical or -omics data. Among them, the Topological Data Analysis (TDA) is a rapidly growing field that combines concepts from algebraic topology and computational geometry to analyze and extract meaningful information from complex and high-dimensional data sets \cite{carlsson2009topology}. Moreover, TDA is a robust and effective methodology, able to preserve the intrinsic characteristics of data and the mutual relations among observations, depicting complex data in a graph-based representation. Indeed, building topological models as networks, TDA allows complex diseases to be inspected in a continuous space, where subjects can ‘fluctuate’ over the graph, sharing, at the same time, more than one adjacent node of the network\cite{dagliati2020using}.\\
+Phenotyping is a process of characterizing and classifying individuals based on observable traits or phenotypic characteristics. In the context of medicine and biology, phenotyping involves the systematic analysis and measurement of various physical, physiological, and behavioral features of individuals, such as height, weight, blood pressure, biochemical markers, imaging data, and more. Phenotyping plays a crucial role in precision medicine as it provides essential data for understanding individual health characteristics and disease manifestations, by combining data from different sources to gain comprehensive insights into an individual's health status and disease risk. This integrated approach allows for more accurate disease diagnosis, prognosis, and treatment selection.  The same considerations could be also be extended in omics research, in which the expression values of thousands of genes and proteins, or the incidence of somatic and germline are usually assessed to link molecular activities with the onset or the progression of diseases. In this field, phenotyping are needed to identify patterns and associations between phenotypic traits and a huge amount of available features. These analyses can uncover novel disease subtypes, identify predictive markers, and facilitate the development of personalized treatment strategies.\\
+In this context, the application of unsupervised learning methodologies could help the identification of specific phenotypes in huge heterogeneous cohorts, such as clinical or -omics data. Among them, the Topological Data Analysis (TDA) is a rapidly growing field that combines concepts from algebraic topology and computational geometry to analyze and extract meaningful information from complex and high-dimensional data sets \cite{carlsson2009topology}. Moreover, TDA is a robust and effective methodology, able to preserve the intrinsic characteristics of data and the mutual relations among observations, depicting complex data in a graph-based representation. Indeed, building topological models as networks, TDA allows complex diseases to be inspected in a continuous space, where subjects can ‘fluctuate’ over the graph, sharing, at the same time, more than one adjacent node of the network\cite{dagliati2020using}.\\
 Overall, TDA offers a powerful set of tools to capture the underlying topological features of data, revealing essential patterns and relationships that might be hidden from traditional statistical techniques\cite{casaclang2019network}.
 
 \subsection{The PIUMA package} \label{piuma_pack}
@@ -95,7 +106,7 @@ The \piuma \footnote{PIUMA is the italian word meaning 'feather'}(\underline{\te
 PIUMA is available by Github:
 
 <<chu_1, eval=FALSE>>=
-install.packages(devtools)
+install.packages("devtools")
 devtools::install_github("BioinfoMonzino/PIUMA")
 @
 
@@ -108,12 +119,16 @@ devtools::install_github("BioinfoMonzino/PIUMA")
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tutorial} \label{tutor_chp2}
 \subsection{The testing dataset} \label{dataset}
-We tested \piuma on a subset of the single-cell RNA Sequencing dataset (\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE193346}{GSE: GSE193346}) generated and published by \emph{Feng et al.} (2022) on Nature Communication to demonstrate that distinct transcriptional profiles are present in specific cell types of each heart chambers, which were attributed to have roles in development \cite{feng2022single}.
-In this tutorial, our aim will be to exploit \piuma for identifying sub-population of vascular endothelial cells which can be associated with specific heart developmental stages.
-The original dataset consisted of three layers of heterogeneity: cell type, stage and zone (\emph{i.e.,} heart chamber). Our testing dataset was obtained by subsetting vascular endothelial cells (cell type) and extracting raw counts and metadata:
+We tested \piuma on a subset of the single-cell RNA Sequencing dataset (\href{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE193346}{GSE: GSE193346}) generated and published by \emph{Feng et al.} (2022) on Nature Communication to demonstrate that distinct transcriptional profiles are present in specific cell types of each heart chambers, which were attributed to have roles in cardiac development \cite{feng2022single}.
+In this tutorial, our aim will be to exploit \piuma for identifying sub-population of vascular endothelial cells, which can be associated with specific heart developmental stages.
+The original dataset consisted of three layers of heterogeneity: cell type, stage and zone (\emph{i.e.,} heart chamber). Our testing dataset was obtained by subsetting vascular endothelial cells (cell type) by \Biocpkg{Seurat} object, extracting raw counts and metadata. Thus, we filtered low expressed genes and normalized data by \Biocpkg{DaMiRseq} :
 <<chu_3, eval=FALSE>>=
-############# import Seurat Object from GEO
-#download .rds.gz file from GEO, extract it and, then, uploaded it in R:
+#############################################
+############# NOT TO EXECUTE ################
+########## please skip this chunk ###########
+#############################################
+
+
 dataset_seu <- readRDS("./GSE193346_CD1_seurat_object.rds")
 
 # subset vascular endothelial cells
@@ -125,10 +140,8 @@ meta_cl <- vascularEC_seuobj@meta.data[, c(10,13,14,15)]
 meta_cl[sapply(meta_cl, is.character)] <- lapply(meta_cl[sapply(meta_cl,
                                                                 is.character)],
                                                  as.factor)
-@
 
-Thus, we filtered low expressed genes and normalized data by \Biocpkg{DaMiRseq}:
-<<chu_4, eval=FALSE>>=
+## Filtering and normalization
 colnames(meta_cl)[4] <- "class"
 SE <- DaMiR.makeSE(df_cl, meta_cl)
 data_norm <- DaMiR.normalization(SE,
@@ -174,7 +187,7 @@ The object \Robject{res} is a \Robject{list} containing 4 slots:
 \end{itemize}
 
 Then, the scaled data stored in \Robject{data\_scaled01}, called \emph{'point-cloud'} in TDA jargon, can be projected in a low dimensional space and transformed in distance matrix, exploiting the \Rfunction{dfToProjection} and \Rfunction{dfToDistance} functions, respectively.
-In this example, we will implement the 'umap' as projection strategy, to obtain the first 2 reduced dimensions (\Rcode{nComp = 2}) and the Euclidean distance (\Rcode{distMethod = "euclidean"}) as distance metrics. However, on one hand, \piuma allows setting 6 different projection strategies with their specific arguments: \Rcode{umap}, \Rcode{t-SNE}, \Rcode{PCA}, \Rcode{MDS}, \Rcode{kPCA}, and \Rcode{IsoMap}. On the other hand, 3 types of well-known distance metrics are available: Euclidean, Pearson's correlation and the Gower's distance. Users can also use standard external functions both to implement the low-dimensional reduction  (\textit{e.g.,} the built-in \Rfunction{princomp} function) and to calculate distances (\textit{e.g.,} the built-in \Rfunction{dist} function).
+In this example, we will use the 'umap' as projection strategy, to obtain the first 2 reduced dimensions (\Rcode{nComp = 2}) and the Euclidean distance (\Rcode{distMethod = "euclidean"}) as distance metrics. \piuma allows setting 6 different projection strategies with their specific arguments: \Rcode{UMAP}, \Rcode{TSNE}, \Rcode{PCA}, \Rcode{MDS}, \Rcode{KPCA}, and \Rcode{ISOMAP} and 3 types of well-known distance metrics are available: Euclidean, Pearson's correlation and the Gower's distance (to be preferred in case of categorical features are present). Users can also use standard external functions both to implement the low-dimensional reduction  (\textit{e.g.,} the built-in \Rfunction{princomp} function) and to calculate distances (\textit{e.g.,} the built-in \Rfunction{dist} function).
 
 <<chu_7, dev="pdf">>=
 set.seed(1)
@@ -198,11 +211,11 @@ df_dist <- dfToDistance(res$data_scaled01, distMethod = "euclidean")
 
 \begin{figure}[!htbp]
 \includegraphics{figure/chu_7-1}
-\caption{\textbf{Scatterplot from UMAP.} Four scatter plots are drawn, using the first 2 components identified by UMAP. Each panel represents cells belonging to specific heart chamber, while colors refer to the development stage.}
+\caption{\textbf{Scatterplot from UMAP.} Four scatter plots are drawn, using the first 2 components identified by UMAP. Each panel represents cells belonging to a specific heart chamber, while colors refer to the development stage.}
 \label{figumap}
 \end{figure}
 \FloatBarrier
-As shown in Figure~\ref{figumap}, the most of vascular endothelial cells are located in ventricles where, in turn, it is possible to more easily appreciate differences in the developmental stages.
+As shown in Figure~\ref{figumap}, the most of vascular endothelial cells are located in ventricles where, in turn, it is possible to more easily appreciate cell groups based on developmental stages.
 
 \subsection{TDA Mapper} \label{TDAMapper}
 One of the core algorithms in TDA is the TDA \textbf{Mapper}, which is designed to provide a simplified representation of the data's topological structure, making it easier to interpret and analyze. The fundamental idea behind TDA Mapper is to divide the data into overlapping subsets called 'clusters' and, then, build a simplicial complex that captures the relationships between these clusters. This simplicial complex can be thought of as a network of points, edges, triangles, and higher-dimensional shapes that approximate the underlying topology of the data.
@@ -234,10 +247,10 @@ dfMapper["node_117_cl_1", 1]
 
 @
 The argument \Robject{df2Dlens} will expect a 2 columns \Robject{data.frame} as \piuma applies a 2 dimensional lens function to the dataset. Here, we decided to generated \textbf{15 bins} (for each dimension), each one overlapping by \textbf{30\%} with the adjacent ones. The \textbf{k-means} algorithm is, then, applied on the sample belonging to each 'squared' bin.
-In this example,the Mapper aggregated samples in 369 partially overlapping clusters. Indeed, as shown in the previous code chunk, the nodes 'node\_102\_cl\_1' and 'node\_102\_cl\_1' shared 2 out of 4 cells.
+In this example,the Mapper aggregated samples in 369 partially overlapping clusters. Indeed, as shown in the previous code chunk, the nodes 'node\_102\_cl\_1' and 'node\_117\_cl\_1' shared 2 out of 4 cells.
 
 \subsection{Nodes Similarity and Enrichment} \label{NodeEnrich}
-The output of mapper \Robject{data.frame} in which each rows represent a cluster of samples (here, a cluster of cells), called \textbf{'node'} in network theory jargon. \piuma allows the users to also generate a matrix that specifies the similarity between nodes (\textbf{'edge'}) allowing to represent the data as a network. As, in this context, the similarity consists of the number of samples, shared by nodes, \piuma implements a function (\Rfunction{jaccardMatrix}) to calculate the Jaccard's index between each pairs of nodes.
+The output of mapper \Robject{data.frame} in which each rows represent a cluster of samples (here, a cluster of cells), called \textbf{'node'} in network theory jargon. \piuma allows the users to also generate a matrix that specifies the similarity between nodes (\textbf{'edge'}) allowing to represent the data as a network. Since the similarity, in this context, consists of the number of samples, shared by nodes, \piuma implements a function (\Rfunction{jaccardMatrix}) to calculate the Jaccard's index between each pairs of nodes.
 
 <<chu_10, dev="pdf">>=
 # Jaccard Matrix
@@ -250,21 +263,18 @@ Regarding the similarity matrix, we obtained a Jaccard matrix where each cluster
 Moreover, the \Rfunction{tdaDfEnrichment} allows inferring the features values for the generated nodes, by returning the averaged variables values of samples belonging to specific nodes. Generally, this step is called 'Node Enrichment'. In addition the size of each node is also appended to the output \Robject{data.frame} (the last column name is 'size').
 
 <<chu_11, dev="pdf">>=
-# rescale output for visualization purposes
-scale_values <- function(x){(x-min(x))/(max(x)-min(x))}
-scaled_zone <- scale_values(res$outcome[,"zone"])
-
 # Node enrichment
-enrich_node <- tdaDfEnrichment(dfMapper, cbind(scaled_zone, res$data_scaled01))
+outcome <- res$outcome[,"zone"]
+enrich_node <- tdaDfEnrichment(dfMapper, cbind(res$data_scaled01,outcome))
 head(enrich_node[1:5, tail(names(enrich_node), 5)])
 @
 
 Printing the last 5 columns of the \Robject{data.frame} returned by \Rfunction{tdaDfEnrichment}, we can show the averaged expression values of each nodes for 4 mitochondrial genes as well as the number of samples belonging to the nodes.
 
 \subsection{Network assessment} \label{NetAssess}
-TDA needs several parameters to be set, such as the type of projection algorithm, the distance metrics, the number of overlapping bins, the percentage of overlapping, and the clustering techniques; moreover, often, even some parameters of specific algorithm have to be chosen (\emph{e.g.,} the number of umap neighbors). This means that TDA analysis should be repeated several times, varying the hyperparameters to set the suitable set of them ('grid search' approach) and that an evaluation metrics is needed to assess each result.
-\piuma implements two different strategy to assess TDA results:
-The TDA Mapper algorithm proceeds through several consecutive steps:
+TDA requires several parameters to be set, such as the type of projection algorithm, the distance metrics, the number of overlapping bins, the percentage of overlap, and the clustering techniques. Moreover, often,  of specific algorithm parameters need to be chosen, such as the number of UMAP neighbors. This means that TDA analysis should be repeated several times, varying the hyperparameters to find the suitable combination ('grid search' approach) and an evaluation metrics is needed to assess each result.
+\piuma implements two different strategies to assess TDA results:
+
 \begin{itemize}
   \item{ A \textbf{supervised approach}, usually called \textbf{'anchoring'}, in which the entropy of the network generated by TDA is calculated averaging the entropies of each node using one single outcome as class (\emph{i.e.,} 'anchor'). The lower the entropy, the better the network.}
   \item{ \textbf{An unsupervised approach} that exploits a topological measurement to force the network to be scale-free. Scale-free networks are characterized by few highly connected nodes (hub nodes) and many poorly connected nodes (leaf nodes). Scale-free networks follows a power-law degree distribution in which the probability that a node has k links follows $P(k) \sim  k^{-\gamma}$, where $k$ is a node degree (\emph{i.e.,}, the number of its connections), $ \gamma $ is a degree exponent, and $P(k)$ is the frequency of nodes with a specific degree.
@@ -277,14 +287,15 @@ The second approach is preferable because no prior knowledge (\emph{i.e.,}, outc
 
 <<chu_12, dev="pdf">>=
 # Anchoring (supervised)
-entropy <-  checkNetEntropy(enrich_node$scaled_zone)
+entropy <-  checkNetEntropy(enrich_node$outcome)
 entropy
+
 # Scale free network (unsupervised)
 netModel <- checkScaleFreeModel(jacc, showPlot = "yes")
 netModel
 @
 In this example, we tested both the approaches even if the unsupervised one is preferable as no prior knowledge (i.e., outcome) is needed to assess the network. We got a global entropy of 0.82 and correlations between P(k) and k equal to -0.78 and -0.62, with data in linear scale or log-log scale (Figure~\ref{figuscalefree}), respectively. \piuma provides users also with the $ \gamma $ value, so that it is easy to assess if the network is scale-free ($ 2 < \gamma < 3 $) or not. In this case, $ \gamma$ is equal to 2.10, meaning that the network can be considered scale-free.
-Overall, the entropy, the correlation between P(k) and k (linear or log-log scale), and/or the $\gamma$ value, provided by \Rfunction{checkNetEntropy} and \Rfunction{checkScaleFreeModel}, could be use to compare different sets of hyper-parameters, such as different lenses, space reduction algorithms and Mapper arguments.
+Overall, the entropy, the correlation between P(k) and k (linear or log-log scale), and/or the $\gamma$ value, provided by \Rfunction{checkNetEntropy} and \Rfunction{checkScaleFreeModel}, could be used to compare different sets of hyper-parameters, such as different lenses, space reduction algorithms and Mapper arguments.
 
 \begin{figure}[!htbp]
 \includegraphics{figure/chu_12-1}
@@ -304,6 +315,7 @@ write.table(x = round(jacc,3),
             quote = FALSE,
             na = "",
             col.names = NA)
+
 write.table(x = enrich_node,
             file = "./nodeEnrichment.txt",
             sep = "\t",
@@ -322,7 +334,7 @@ The network representation where each node is colored by the developmental stage
 \end{figure}
 \FloatBarrier
 
-As shown in Figure~\ref{CytoscapeOutput}, using the transcriptome of vascular endothelial cells it is possible to identify 11 communities of cells (top-right); interestingly, some of them are in the same developmental stage (top-left). Moreover, there are clusters showing similar expression for some genes but different expression for other genes, suggesting that the sup population could have a different biological function; indeed, for example, the cluster orange and yellow have a similar average expression of Igfpb7 (bottom-right) but different expression level of Aprt (bottom-left).
+As shown in Figure~\ref{CytoscapeOutput}, using the transcriptome of vascular endothelial cells, it is possible to identify 11 communities of cells (top-right). Interestingly, some of them are in the same developmental stage (top-left). Moreover, there are clusters showing similar expression for some genes but different expression for other genes, suggesting that the sub-population could have a different biological function.For example, orange and yellow clusters have a similar average expression of Igfpb7 (bottom-right) but different expression level of Aprt (bottom-left).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Session Info}

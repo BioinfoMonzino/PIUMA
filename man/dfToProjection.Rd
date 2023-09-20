@@ -6,7 +6,7 @@
 \usage{
 dfToProjection(
   df,
-  method = c("PCA", "UMAP", "TSNE", "MDS", "KPCA", "isomap"),
+  method = c("PCA", "UMAP", "TSNE", "MDS", "KPCA", "ISOMAP"),
   nComp = 2,
   centerPCA = FALSE,
   scalePCA = FALSE,

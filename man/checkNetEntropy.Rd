@@ -2,20 +2,21 @@
 % Please edit documentation in R/PIUMA_assessTDA.R
 \name{checkNetEntropy}
 \alias{checkNetEntropy}
-\title{Compute the Network Entropy (only for binary outcome!)}
+\title{Compute the Network Entropy}
 \usage{
-checkNetEntropy(vectFreq)
+checkNetEntropy(outcome_vect)
 }
 \arguments{
-\item{vectFreq}{A vector containing the frequency of the outcome
-(i.e. p(outcome=1) ) for each node of a network.}
+\item{outcome_vect}{A vector containing the average outcome values for each
+node
+of a network.}
 }
 \value{
-The average of the entropies computed for each node of a network.
+The network entropy using each node of a network.
 }
 \description{
-This function computes the average of the entropies computed for
-each node of a network, only for variables whose elements range (0;1)
+This function computes the average of the entropies for
+each node of a network.
 }
 \details{
 The average of the entropies is related to the amount of information
@@ -24,7 +25,7 @@ stored in the network.
 \examples{
 # use example data:
 set.seed(1)
-entropy <- checkNetEntropy(runif(5))
+entropy <- checkNetEntropy(round(runif(10),0))
 
 }
 \seealso{

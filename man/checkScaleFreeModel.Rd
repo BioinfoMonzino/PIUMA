@@ -9,7 +9,7 @@ checkScaleFreeModel(jaccIndexes, showPlot = c("yes", "no"))
 \arguments{
 \item{jaccIndexes}{A matrix of the Jaccard indexes between pair of nodes.}
 
-\item{showPlot}{A string indicating whether the plot has to be 
+\item{showPlot}{A string indicating whether the plot has to be
 generated or not. Only 'yes' (default) or 'no' are allowed}
 }
 \value{
@@ -17,7 +17,7 @@ A list containing:
 \itemize{
    \item the estimated gamma value
    \item The correlation between the k and the degree distribution p(k).
-   \item The p-value of the correlation between the k and the degree 
+   \item The p-value of the correlation between the k and the degree
    distribution p(k).
    \item The correlation between the logarithm (base 10) of k and the
    logarithm (base 10) of the degree distribution p(k).
@@ -29,7 +29,7 @@ A list containing:
 This function assesses the fitting to a scale-free net model.
 }
 \details{
-The scale-free networks show a high negative correlation beween k 
+The scale-free networks show a high negative correlation beween k
 and p(k).
 }
 \examples{

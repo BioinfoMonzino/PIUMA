@@ -6,10 +6,16 @@ Version: 0.1.0
 Authors@R: c(
     person("Mattia", "Chiesa", , "mattia.chiesa@cardiologicomonzino.it", 
 	role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7427-9954")),
-    person("Luca", "Piacentini", , "luca.piacentini@cardiologicomonzino.it",
-	role = "aut", comment = c(ORCID = "0000-0003-1022-4481")),
-    person("Laura", "Ballarini", , "laura.ballarini01@universitadipavia.it",
-	role = "aut")
+    person("Arianna", "Dagliati", , "arianna.dagliati@unipv.it",
+	role = "aut", comment = c(ORCID = "0000-0002-5041-0409")),
+	person("Alessia", "Gerbasi", , "alessia.gerbasi01@universitadipavia.it",
+	role = "aut", comment = c(ORCID = "0000-0003-4501-1777")),
+	person("Giuseppe", "Albi", , "giuseppe.albi01@universitadipavia.it",
+	role = "aut"),
+	person("Laura", "Ballarini", , "laura.ballarini01@universitadipavia.it",
+	role = "aut"),
+	    person("Luca", "Piacentini", , "luca.piacentini@cardiologicomonzino.it",
+	role = "aut", comment = c(ORCID = "0000-0003-1022-4481"))
   )
 Description: The PIUMA package offers a tidy pipeline of Topological
         Data Analysis frameworks to identify and characterize 
