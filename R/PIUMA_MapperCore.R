@@ -300,5 +300,16 @@ mapperCore <- function (dfDistances, df2Dlens, nBins=15, overlap=0.4,
                                      drop=FALSE]
   }
 
+  # remove identical nodes (only shared samples): leave-one-out
+  uniq_nodes <- unique(pointsInNodeDf$sample_x_cluster)
+  for (i in 1:length(uniq_nodes)){
+    idx <- which(pointsInNodeDf$sample_x_cluster %in% uniq_nodes[i])
+    if(length(idx) > 1){
+      idx_bad <- idx[2:length(idx)]
+      pointsInNodeDf[idx_bad,1] <- NA
+    }
+  }
+  pointsInNodeDf <- pointsInNodeDf[complete.cases(pointsInNodeDf),,drop=FALSE]
+
   return(pointsInNodeDf)
 }
