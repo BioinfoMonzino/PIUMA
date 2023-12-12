@@ -2,7 +2,7 @@ Package: PIUMA
 Type: Package
 Title: Phenotypes Identification Using Mapper from topological data 
      Analysis(PIUMA)
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(
     person("Mattia", "Chiesa", , "mattia.chiesa@cardiologicomonzino.it", 
 	role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7427-9954")),
@@ -20,7 +20,7 @@ Authors@R: c(
 Description: The PIUMA package offers a tidy pipeline of Topological
         Data Analysis frameworks to identify and characterize 
 		communities in high and heterogeneous dimensional data.
-License: GPL-2 (>= 2)
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 biocViews: Clustering, GraphAndNetwork, DimensionReduction, Network,
