@@ -2,7 +2,8 @@
 #'
 #' @description This function assesses the fitting to a scale-free net model.
 #'
-#' @param jaccIndexes A matrix of the Jaccard indexes between pair of nodes.
+#' @param x A TDAobj object, processed by the  \code{\link{jaccardMatrix}}
+#'
 #' @param showPlot A string indicating whether the plot has to be
 #' generated or not. Only 'yes' (default) or 'no' are allowed
 #'
@@ -21,15 +22,15 @@
 #' @details The scale-free networks show a high negative correlation beween k
 #' and p(k).
 #'
-#' @author Laura Ballarini, Mattia Chiesa
+#' @author  Mattia Chiesa, Laura Ballarini,Luca Piacentini
 #'
 #' @examples
 #' ## use example data:
-#' data(jacc_mat_tda)
-#' netModel <- checkScaleFreeModel(jacc_mat_tda, "no")
+#' data(tda_test_data)
+#' netModel <- checkScaleFreeModel(tda_test_data, "no")
 #'
 #' @seealso
-#' \code{\link{importSplitScale}},
+#' \code{\link{makeTDAobj}},
 #' \code{\link{dfToDistance}},
 #' \code{\link{dfToProjection}},
 #' \code{\link{mapperCore}},
@@ -38,17 +39,20 @@
 #' @export
 #'
 #'
-checkScaleFreeModel <- function(jaccIndexes,
-                                showPlot=c("yes","no")) {
+checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
 
   # checks----------------------------------------------------------------------
+  if (!is(x,'TDAobj'))
+    stop("'x' argument must be a TDAobj object")
+
+  jaccIndexes <- x@jacc
 
   # check missing arguments
   if (missing(jaccIndexes))
     stop("'jaccIndexes' argument must be provided")
 
   if (missing(showPlot)) {
-    showPlot <- showPlot[1]
+    showPlot <- showPlot[2]
   }
 
   # check the type of argument
@@ -90,13 +94,6 @@ checkScaleFreeModel <- function(jaccIndexes,
 
   if (max(dataPl) >= 5) {
 
-    # average path length
-    #numNodes <- gorder(graphFromAdjMatr)
-    #averPathLen <- average.path.length(graphFromAdjMatr)
-    # infoModelRes[['averPathLen']] <- averPathLen
-    # infoModelRes[['nNodes']] <- numNodes
-
-    # get alpha (alpha=gamma, p(k)~k^-gamma)
     powLawFit <- fit_power_law(dataPl+1, round(max(dataPl)/5))
     infoModelRes[['gamma']] <- powLawFit$alpha
 
@@ -163,7 +160,7 @@ checkScaleFreeModel <- function(jaccIndexes,
         theme(plot.title = element_text(size = 10, face = "bold"))
 
 
-      print(p1 + p2)
+      show(wrap_plots(p1, p2))
     }
 
   } else { # else related to if (max(dataPl) >= 5)
@@ -197,7 +194,7 @@ checkScaleFreeModel <- function(jaccIndexes,
 #' @details The average of the entropies is related to the amount of information
 #' stored in the network.
 #'
-#' @author Laura Ballarini, Mattia Chiesa
+#' @author Mattia Chiesa, Laura Ballarini, Luca Piacentini
 #'
 #' @examples
 #' # use example data:
@@ -205,7 +202,7 @@ checkScaleFreeModel <- function(jaccIndexes,
 #' entropy <- checkNetEntropy(round(runif(10),0))
 #'
 #' @seealso
-#' \code{\link{importSplitScale}},
+#' \code{\link{makeTDAobj}},
 #' \code{\link{dfToDistance}},
 #' \code{\link{dfToProjection}},
 #' \code{\link{mapperCore}},
@@ -242,7 +239,7 @@ checkNetEntropy <- function(outcome_vect) {
     p_logp[i] <- prob_class * log(prob_class, base = 2)
 
   }
-  outcome_entropy <- round(-sum(p_logp),3)
+  outcome_entropy <- round(-sum(p_logp), 3)
   return(outcome_entropy)
 
 }

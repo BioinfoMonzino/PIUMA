@@ -1,8 +1,18 @@
 #' Example datasets for PIUMA package
 #'
-#' A dataset with metadata extracted from Feng et al.
-#' (2022, Nature Communications) to test the
-#' \code{\link{importSplitScale}} funtion of \code{PIUMA} package.
+#' We tested PIUMA on a subset of the single-cell RNA Sequencing dataset
+#' (GSE:GSE193346 generated and published by Feng et al. (2022)
+#' on Nature Communication to demonstrate that distinct
+#' transcriptional profiles are present in specific cell types of each heart
+#' chambers, which were attributed to have roles in cardiac development.
+#' In this tutorial, our aim will be to exploit PIUMA for identifying
+#' sub-population of vascular endothelial cells, which can be associated
+#' with specific heart developmental stages. The original dataset consisted
+#' of three layers of heterogeneity: cell type, stage and zone
+#' (i.e., heart chamber). Our testing dataset was obtained by
+#' subsetting vascular endothelial cells (cell type) by Seurat object,
+#' extracting raw counts and metadata. Thus, we filtered low expressed genes
+#' and normalized data by DaMiRseq
 #'
 #' @format A dataframe containing 1180 rows (cells) and 2 columns (outcomes)
 #'
@@ -11,9 +21,19 @@
 #'
 "vascEC_meta"
 
-#' A matrix with scRNA-seq counts data extracted from Feng et al.
-#' (2022, Nature Communications) to test the
-#' \code{\link{importSplitScale}} funtion of \code{PIUMA} package.
+#' We tested PIUMA on a subset of the single-cell RNA Sequencing dataset
+#' (GSE:GSE193346 generated and published by Feng et al. (2022)
+#' on Nature Communication to demonstrate that distinct
+#' transcriptional profiles are present in specific cell types of each heart
+#' chambers, which were attributed to have roles in cardiac development.
+#' In this tutorial, our aim will be to exploit PIUMA for identifying
+#' sub-population of vascular endothelial cells, which can be associated
+#' with specific heart developmental stages. The original dataset consisted
+#' of three layers of heterogeneity: cell type, stage and zone
+#' (i.e., heart chamber). Our testing dataset was obtained by
+#' subsetting vascular endothelial cells (cell type) by Seurat object,
+#' extracting raw counts and metadata. Thus, we filtered low expressed genes
+#' and normalized data by DaMiRseq
 #'
 #' @format A matrix containing 1180 rows (cells) and 838 columns (genes)
 #'
@@ -32,43 +52,10 @@
 #'
 "df_test_proj"
 
-#' A dataset to test the \code{\link{mapperCore}} funtion of \code{PIUMA}
-#'  package.
+#' A TDAobj to test the \code{PIUMA} package.
 #'
-#' @format A data.frame containing 15 rows (cells) and 2 columns (principal
-#' components)
+#' @format A TDAobj with data in all slots
 #'
 #' @return
 #' An example dataset for \code{PIUMA} package
-#'
-"lenses_tda"
-
-#' A dataset to test the \code{\link{mapperCore}} funtion of \code{PIUMA}
-#'  package.
-#'
-#' @format A data.frame containing 15 rows (cells) and 15 columns (cells)
-#'
-#' @return
-#' An example dataset for \code{PIUMA} package
-#'
-"dist_mat_tda"
-
-#' A dataset to test the \code{\link{jaccardMatrix}} and
-#' \code{\link{tdaDfEnrichment}} funtions of \code{PIUMA} package.
-#'
-#' @format A data.frame containing 15 rows (cells) and 15 columns (genes)
-#'
-#' @return
-#' An example dataset for \code{PIUMA} package
-#'
-"dfMapper_tda"
-
-#' A dataset to test the \code{\link{checkScaleFreeModel}} funtion
-#' of \code{PIUMA} package.
-#'
-#' @format A data.frame containing 17 rows (nodes) and 17 columns (nodes)
-#'
-#' @return
-#' An example dataset for \code{PIUMA} package
-#'
-"jacc_mat_tda"
+"tda_test_data"

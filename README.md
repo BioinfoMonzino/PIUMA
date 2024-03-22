@@ -6,14 +6,19 @@ The PIUMA package allows implementing all the main steps of a Topological Data A
 
 
 ## Installation
+The easiest way to get the latest version of PIUMA is to install it via devtools:
 ```{r, eval = FALSE}
-# The easiest way to get PIUMA is to install devtools:
 install.packages("devtools")
-
-# and then, type:
 devtools::install_github("BioinfoMonzino/PIUMA")
 ```
+To get the stable version of PIUMA, install via Bioconductor:
 
+```{r, eval = FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-Mattia Chiesa, Laura Ballerini, Alessia Gerbasi, Giuseppe Albi, Arianna Dagliati and Luca Piacentini
+BiocManager::install("PIUMA")
+```
+
+Mattia Chiesa, Laura Ballarini, Alessia Gerbasi, Giuseppe Albi, Arianna Dagliati and Luca Piacentini
 

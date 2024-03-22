@@ -1,8 +1,7 @@
 Package: PIUMA
 Type: Package
-Title: Phenotypes Identification Using Mapper from topological data 
-     Analysis(PIUMA)
-Version: 0.99.3
+Title: Phenotypes Identification Using Mapper from topological data Analysis
+Version: 0.99.4
 Authors@R: c(
     person("Mattia", "Chiesa", , "mattia.chiesa@cardiologicomonzino.it", 
 	role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7427-9954")),
@@ -14,20 +13,22 @@ Authors@R: c(
 	role = "aut"),
 	person("Laura", "Ballarini", , "laura.ballarini01@universitadipavia.it",
 	role = "aut"),
-	    person("Luca", "Piacentini", , "luca.piacentini@cardiologicomonzino.it",
+	person("Luca", "Piacentini", , "luca.piacentini@cardiologicomonzino.it",
 	role = "aut", comment = c(ORCID = "0000-0003-1022-4481"))
   )
 Description: The PIUMA package offers a tidy pipeline of Topological
         Data Analysis frameworks to identify and characterize 
 		communities in high and heterogeneous dimensional data.
-License: GPL-3
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 biocViews: Clustering, GraphAndNetwork, DimensionReduction, Network,
      Classification
 VignetteBuilder: knitr
 Imports: cluster, umap, tsne, kernlab, vegan, dbscan, igraph, scales,
-    Hmisc, patchwork, grDevices, stats
-Suggests: BiocStyle, knitr, testthat
-Depends: R (>= 4.2), ggplot2
+    Hmisc, patchwork, grDevices, stats, methods
+Suggests: BiocStyle, knitr, testthat, rmarkdown
+Depends: R (>= 4.3), ggplot2
 RoxygenNote: 7.2.3
+URL: https://github.com/BioinfoMonzino/PIUMA
+BugReports: https://github.com/BioinfoMonzino/PIUMA/issues

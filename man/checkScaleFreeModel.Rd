@@ -4,10 +4,10 @@
 \alias{checkScaleFreeModel}
 \title{Assessment of Scale-Free model fitting}
 \usage{
-checkScaleFreeModel(jaccIndexes, showPlot = c("yes", "no"))
+checkScaleFreeModel(x, showPlot = c("yes", "no"))
 }
 \arguments{
-\item{jaccIndexes}{A matrix of the Jaccard indexes between pair of nodes.}
+\item{x}{A TDAobj object, processed by the  \code{\link{jaccardMatrix}}}
 
 \item{showPlot}{A string indicating whether the plot has to be
 generated or not. Only 'yes' (default) or 'no' are allowed}
@@ -34,17 +34,17 @@ and p(k).
 }
 \examples{
 ## use example data:
-data(jacc_mat_tda)
-netModel <- checkScaleFreeModel(jacc_mat_tda, "no")
+data(tda_test_data)
+netModel <- checkScaleFreeModel(tda_test_data, "no")
 
 }
 \seealso{
-\code{\link{importSplitScale}},
+\code{\link{makeTDAobj}},
 \code{\link{dfToDistance}},
 \code{\link{dfToProjection}},
 \code{\link{mapperCore}},
 \code{\link{jaccardMatrix}}
 }
 \author{
-Laura Ballarini, Mattia Chiesa
+Mattia Chiesa, Laura Ballarini,Luca Piacentini
 }

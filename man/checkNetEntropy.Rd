@@ -29,7 +29,7 @@ entropy <- checkNetEntropy(round(runif(10),0))
 
 }
 \seealso{
-\code{\link{importSplitScale}},
+\code{\link{makeTDAobj}},
 \code{\link{dfToDistance}},
 \code{\link{dfToProjection}},
 \code{\link{mapperCore}},
@@ -37,5 +37,5 @@ entropy <- checkNetEntropy(round(runif(10),0))
 \code{\link{tdaDfEnrichment}}
 }
 \author{
-Laura Ballarini, Mattia Chiesa
+Mattia Chiesa, Laura Ballarini, Luca Piacentini
 }

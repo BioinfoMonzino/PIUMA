@@ -14,8 +14,18 @@ vascEC_meta
 An example dataset for \code{PIUMA} package
 }
 \description{
-A dataset with metadata extracted from Feng et al.
-(2022, Nature Communications) to test the
-\code{\link{importSplitScale}} funtion of \code{PIUMA} package.
+We tested PIUMA on a subset of the single-cell RNA Sequencing dataset
+(GSE:GSE193346 generated and published by Feng et al. (2022)
+on Nature Communication to demonstrate that distinct
+transcriptional profiles are present in specific cell types of each heart
+chambers, which were attributed to have roles in cardiac development.
+In this tutorial, our aim will be to exploit PIUMA for identifying
+sub-population of vascular endothelial cells, which can be associated
+with specific heart developmental stages. The original dataset consisted
+of three layers of heterogeneity: cell type, stage and zone
+(i.e., heart chamber). Our testing dataset was obtained by
+subsetting vascular endothelial cells (cell type) by Seurat object,
+extracting raw counts and metadata. Thus, we filtered low expressed genes
+and normalized data by DaMiRseq
 }
 \keyword{datasets}

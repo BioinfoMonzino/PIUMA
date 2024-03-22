@@ -2,11 +2,10 @@
 % Please edit documentation in R/PIUMA_MapperCore.R
 \name{mapperCore}
 \alias{mapperCore}
-\title{Implement the TDA Mapper algorithm}
+\title{Implement the TDA Mapper algorithm on TDAobj}
 \usage{
 mapperCore(
-  dfDistances,
-  df2Dlens,
+  x,
   nBins = 15,
   overlap = 0.4,
   mClustNode = 2,
@@ -16,11 +15,8 @@ mapperCore(
 )
 }
 \arguments{
-\item{dfDistances}{A data.frame containing the distance matrix derived from
-a point-cloud data.frame.}
-
-\item{df2Dlens}{A data.frame containing 2 lenses,such as 2 principal
-components from low-dimension reduction techniques (i.e., PCA).}
+\item{x}{A TDAobj object, processed by the  \code{\link{dfToDistance}} and
+\code{\link{dfToProjection}} functions.}
 
 \item{nBins}{The number of bins (i.e. the resolution of the cover).
 Default: 15.}
@@ -40,6 +36,9 @@ the resulting data.frame. Default: TRUE.}
 "average" and "complete" values are allowed. Default: "average".}
 }
 \value{
+The starting TDAobj object, in which the result of mapper algorithm
+(inferred nodes with their elements) has been added (slot: 'dfMapper')
+
 A data.frame containing the clusters, with their elements,
  identified by TDA .
 }
@@ -50,18 +49,17 @@ clustering methods.
 }
 \examples{
 # use example data:
-data(dist_mat_tda)
-data(lenses_tda)
+data(tda_test_data)
 set.seed(1)
-dfMapper <- mapperCore(dist_mat_tda, lenses_tda, nBins=5, overlap=0.5,
+dfMapper <- mapperCore(tda_test_data, nBins=5, overlap=0.5,
 mClustNode=2, clustMeth="kmeans")
 
 }
 \seealso{
-\code{\link{importSplitScale}},
+\code{\link{makeTDAobj}},
 \code{\link{dfToDistance}},
 \code{\link{dfToProjection}}
 }
 \author{
-Laura Ballarini, Mattia Chiesa
+Mattia Chiesa, Laura Ballarini, Luca Piacentini
 }
