@@ -359,21 +359,21 @@ strategies to ass
     to unveil communities in our data. The higher the correlation between P(k)
     and k, in log-log scale, the better the network.
 
-```{r,chunk-8, fig.width=10, fig.height=10,warning=FALSE, fig.cap = "Power-law degree distribution. The correlation between P(k) (y-axis) and k (x-axis) is represented in linear scale (on the left) and in log-log scale (on the right). The regression line (orange line) is also provided."}
+```{r,chunk-8, fig.width=10, fig.height=10,warning=FALSE, eval=FALSE, fig.cap = "Power-law degree distribution. The correlation between P(k) (y-axis) and k (x-axis) is represented in linear scale (on the left) and in log-log scale (on the right). The regression line (orange line) is also provided."}
 # Anchoring (supervised)
 entropy <-  checkNetEntropy(TDA_obj@node_data_mat$zone)
 entropy
 
 # Scale free network (unsupervised)
-netModel <- checkScaleFreeModel(TDA_obj, showPlot = "yes")
+netModel <- checkScaleFreeModel(TDA_obj, showPlot = "no")
 netModel
 ```
 
 In this example, we tested both the approaches even if the unsupervised one is
 preferable as no prior knowledge (*i.e.*, outcome) is needed to assess the
 network. We got a global entropy of 1.3 and correlations between P(k) and k
-equal to -0.75 and -0.58, with data in linear scale or log-log scale (Figure
-\@ref(fig:chunk-8)) , respectively. PIUMA provides users also with the $\gamma$
+equal to -0.75 and -0.58, with data in linear scale or log-log scale, 
+respectively. PIUMA provides users also with the $\gamma$
 value, so that it is easy to assess if the network is scale-free
 ($2 < \gamma < 3$) or not. In this case, $\gamma$ is equal to 2.09, meaning that
 the network can be considered scale-free. Overall, the entropy, the correlation
