@@ -19,7 +19,7 @@ dfToProjection(
   kpcaSigma = 0.1,
   kpcaDegree = 1,
   isomNNeigh = 5,
-  showPlot = TRUE,
+  showPlot = FALSE,
   vectColor = NULL
 )
 }

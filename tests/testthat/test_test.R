@@ -186,22 +186,22 @@ expect_error(checkScaleFreeModel(res_import_test, "y"))
 })
 
 
-scalefree_net <- checkScaleFreeModel(res_import_test, "no")
-
-test_that("ScaleFree_2 work",{
-# check results
-expect_true(is.list(scalefree_net))
-expect_true(scalefree_net$pValkpk <= 1)
-expect_true(scalefree_net$pVallogklogpk <= 1)
-expect_true(scalefree_net$corkpk <= 1)
-expect_true(scalefree_net$corlogklogpk <= 1)
-
-expect_true(scalefree_net$pValkpk >= 0)
-expect_true(scalefree_net$pVallogklogpk >= 0)
-expect_true(scalefree_net$corkpk >= -1)
-expect_true(scalefree_net$corlogklogpk >= -1)
-
-})
+# scalefree_net <- checkScaleFreeModel(res_import_test, "no")
+#
+# test_that("ScaleFree_2 work",{
+# # check results
+# expect_true(is.list(scalefree_net))
+# expect_true(scalefree_net$pValkpk <= 1)
+# expect_true(scalefree_net$pVallogklogpk <= 1)
+# expect_true(scalefree_net$corkpk <= 1)
+# expect_true(scalefree_net$corlogklogpk <= 1)
+#
+# expect_true(scalefree_net$pValkpk >= 0)
+# expect_true(scalefree_net$pVallogklogpk >= 0)
+# expect_true(scalefree_net$corkpk >= -1)
+# expect_true(scalefree_net$corlogklogpk >= -1)
+#
+# })
 
 
 

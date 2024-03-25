@@ -35,7 +35,7 @@ and p(k).
 \examples{
 ## use example data:
 data(tda_test_data)
-netModel <- checkScaleFreeModel(tda_test_data, "no")
+#netModel <- checkScaleFreeModel(tda_test_data, "no")
 
 }
 \seealso{
