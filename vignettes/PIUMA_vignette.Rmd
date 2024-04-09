@@ -75,16 +75,16 @@ phenotypes in huge heterogeneous cohorts, such as clinical or -omics data. Among
 them, the Topological Data Analysis (TDA) is a rapidly growing field that
 combines concepts from algebraic topology and computational geometry to analyze
 and extract meaningful information from complex and high-dimensional data sets
-[@carlsson2009topology]. Moreover, TDA is a robust and effective methodology that
-preserves the intrinsic characteristics of data and the mutual relationships
-among observations, by presenting complex data in a graph-based representation.
-Indeed, building topological models as networks, TDA allows complex diseases to
-be inspected in a continuous space, where subjects can 'fluctuate' over the
-graph, sharing, at the same time, more than one adjacent node of the network
-[@dagliati2020using]. Overall, TDA offers a powerful set of tools to capture the
-underlying topological features of data, revealing essential patterns and
-relationships that might be hidden from traditional statistical techniques
-[@casaclang2019network].
+[@carlsson2009topology]. Moreover, TDA is a robust and effective methodology
+that preserves the intrinsic characteristics of data and the mutual
+relationships among observations, by presenting complex data in a graph-based
+representation. Indeed, building topological models as networks, TDA allows
+complex diseases to be inspected in a continuous space, where subjects can
+'fluctuate' over the graph, sharing, at the same time, more than one adjacent
+node of the network [@dagliati2020using]. Overall, TDA offers a powerful set of
+tools to capture the underlying topological features of data, revealing
+essential patterns and relationships that might be hidden from traditional
+statistical techniques [@casaclang2019network].
 
 # Installation
 
@@ -196,6 +196,17 @@ TDA_obj <- makeTDAobj(df_TDA, c("stage","zone"))
 
 ```
 
+For genomic data, such as RNA-Seq or scRNA-Seq, we have also developed a custom function to import a `r Biocpkg("SummarizedExperiment")` object into PIUMA:
+```{r, chunk-3_1,warning=FALSE, eval=FALSE}
+data("vascEC_meta")
+data("vascEC_norm")
+
+dataSE <- SummarizedExperiment(assays=as.matrix(t(vascEC_norm)),
+                               colData=as.data.frame(vascEC_meta))
+TDA_obj <- makeTDAobjFromSE(dataSE, c("stage","zone"))
+
+```
+
 ## Preparing data for Mapper
 
 To perform TDA, some preliminary preprocessing steps have to be carried out;
@@ -228,7 +239,8 @@ TDA_obj <- dfToProjection(TDA_obj,
                       showPlot = FALSE)
 
 # plot point-cloud based on stage and zone
-df_plot <- as.data.frame(cbind(TDA_obj@outcomeFact, TDA_obj@comp), 
+df_plot <- as.data.frame(cbind(getOutcomeFact(TDA_obj),
+                                getComp(TDA_obj)), 
                          stringAsFactor = TRUE)
 
 ggplot(data= df_plot, aes(x=comp1, y=comp2, color=stage))+
@@ -280,11 +292,11 @@ TDA_obj <- mapperCore(TDA_obj,
                        clustMeth = "kmeans")
 
 # number of clusters (nodes)
-dim(TDA_obj@dfMapper)
+dim(getDfMapper(TDA_obj))
 
 # content of two overlapping clusters
-TDA_obj@dfMapper["node_102_cl_1", 1]
-TDA_obj@dfMapper["node_117_cl_1", 1]
+getDfMapper(TDA_obj)["node_102_cl_1", 1]
+getDfMapper(TDA_obj)["node_117_cl_1", 1]
 
 ```
 
@@ -308,8 +320,8 @@ of the number of samples, shared by nodes, PIUMA implements a function
 ```{r,chunk-6, fig.width=10, fig.height=10,warning=FALSE}
 # Jaccard Matrix
 TDA_obj <- jaccardMatrix(TDA_obj)
-head(round(TDA_obj@jacc[1:5,1:5],3))
-round(TDA_obj@jacc["node_102_cl_1","node_117_cl_1"],3)
+head(round(getJacc(TDA_obj)[1:5,1:5],3))
+round(getJacc(TDA_obj)["node_102_cl_1","node_117_cl_1"],3)
 ```
 
 Regarding the similarity matrix, we obtained a Jaccard matrix where each
@@ -323,8 +335,9 @@ In addition the size of each node is also appended to the output `data.frame`
 
 ```{r,chunk-7, fig.width=10, fig.height=10,warning=FALSE}
 TDA_obj <- tdaDfEnrichment(TDA_obj,
-                           cbind(TDA_obj@scaled_data, TDA_obj@outcome))
-head(TDA_obj@node_data_mat[1:5, tail(names(TDA_obj@node_data_mat), 5)])
+                           cbind(getScaledData(TDA_obj),
+                                 getOutcome(TDA_obj)))
+head(getNodeDataMat(TDA_obj)[1:5, tail(names(getNodeDataMat(TDA_obj)), 5)])
 ```
 
 Printing the last 5 columns of the `data.frame` returned by `tdaDfEnrichment`
@@ -361,26 +374,26 @@ strategies to ass
 
 ```{r,chunk-8, fig.width=10, fig.height=10,warning=FALSE, eval=FALSE, fig.cap = "Power-law degree distribution. The correlation between P(k) (y-axis) and k (x-axis) is represented in linear scale (on the left) and in log-log scale (on the right). The regression line (orange line) is also provided."}
 # Anchoring (supervised)
-entropy <-  checkNetEntropy(TDA_obj@node_data_mat$zone)
+entropy <-  checkNetEntropy(getNodeDataMat(TDA_obj)[, "zone"])
 entropy
 
 # Scale free network (unsupervised)
-netModel <- checkScaleFreeModel(TDA_obj, showPlot = "no")
+netModel <- checkScaleFreeModel(TDA_obj, showPlot = "yes")
 netModel
 ```
 
 In this example, we tested both the approaches even if the unsupervised one is
 preferable as no prior knowledge (*i.e.*, outcome) is needed to assess the
 network. We got a global entropy of 1.3 and correlations between P(k) and k
-equal to -0.75 and -0.58, with data in linear scale or log-log scale, 
-respectively. PIUMA provides users also with the $\gamma$
-value, so that it is easy to assess if the network is scale-free
-($2 < \gamma < 3$) or not. In this case, $\gamma$ is equal to 2.09, meaning that
-the network can be considered scale-free. Overall, the entropy, the correlation
-between P(k) and k (linear or log-log scale), and/or the $\gamma$ value,
-provided by `checkNetEntropy` and `checkScaleFreeModel`, could be used to
-compare different sets of hyper-parameters, such as different lenses, space
-reduction algorithms and Mapper arguments.
+equal to -0.75 and -0.58, with data in linear scale or log-log scale,
+respectively. PIUMA provides users also with the $\gamma$ value, so that it is
+easy to assess if the network is scale-free ($2 < \gamma < 3$) or not. In this
+case, $\gamma$ is equal to 2.09, meaning that the network can be considered
+scale-free. Overall, the entropy, the correlation between P(k) and k (linear or
+log-log scale), and/or the $\gamma$ value, provided by `checkNetEntropy` and
+`checkScaleFreeModel`, could be used to compare different sets of
+hyper-parameters, such as different lenses, space reduction algorithms and
+Mapper arguments.
 
 ## Export data for Cytoscape
 
@@ -391,14 +404,14 @@ network (nodes and edges) and a `data.frame` with additional nodes information
 to enrich the network (`TDA_obj@node_data_mat`):
 
 ```{r,, fig.width=10, fig.height=10, warning=FALSE, eval=FALSE}
-write.table(x = round(TDA_obj@jacc,3),
+write.table(x = round(getJacc(TDA_obj),3),
             file = "./jaccard.matrix.txt",
             sep = "\t",
             quote = FALSE,
             na = "",
             col.names = NA)
 
-write.table(x = TDA_obj@node_data_mat,
+write.table(x = getNodeDataMat(TDA_obj),
             file = "./nodeEnrichment.txt",
             sep = "\t",
             quote = FALSE,

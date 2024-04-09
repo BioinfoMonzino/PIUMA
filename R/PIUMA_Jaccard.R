@@ -38,18 +38,11 @@
 #'
 jaccardMatrix <- function (x) {
 
-  # inner function for jaccard computation--------------------------------------
-  jaccard <- function(a, b) {
-    intersection <- length(intersect(a, b))
-    union <- length(a) + length(b) - intersection
-    return (intersection/union)
-  }
-
-  # checks----------------------------------------------------------------------
+  # checks-------------------------------
   if (!is(x,'TDAobj'))
     stop("'x' argument must be a TDAobj object")
 
-  dfMapper <- x@dfMapper
+  dfMapper <- getDfMapper(x)
 
   # check missing arguments
   if (missing(dfMapper))
@@ -60,11 +53,11 @@ jaccardMatrix <- function (x) {
     stop("'dfMapper' argument must be a data.frame")
 
   # specific checks
-  if (dim(dfMapper)[2] != 1)
-    stop("dim(dfMapper)[2] must be equal to 1")
+  if (ncol(dfMapper) != 1)
+    stop("ncol(dfMapper) must be equal to 1")
 
-  if (!all(vapply(dfMapper, class, FUN.VALUE = character(1)) %in% "character"))
-    stop("'dfMapper' elements must be of type 'character'")
+  if (!(all(vapply(dfMapper, is.character,logical(1)))))
+    stop("'dfMapper' variables must be numeric")
 
   # check the presence of NA or Inf
   if (any(is.na(dfMapper)))
@@ -73,8 +66,7 @@ jaccardMatrix <- function (x) {
   if (any(is.infinite(as.matrix(dfMapper))))
     stop("Inf values are not allowed in the 'dfMapper' data.frame")
 
-  # body------------------------------------------------------------------------
-
+  # body----------
   jaccDataRes <- matrix(nrow = nrow(dfMapper), ncol=nrow(dfMapper))
   rownames(jaccDataRes) <- rownames(dfMapper)
   colnames(jaccDataRes) <- rownames(dfMapper)
@@ -94,7 +86,7 @@ jaccardMatrix <- function (x) {
 
   diag(jaccDataRes) <- NA
 
-  x@jacc <- jaccDataRes
+  x <- setJacc(x, jaccDataRes)
 
   return(x)
 }

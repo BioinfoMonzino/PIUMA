@@ -41,11 +41,11 @@
 #'
 checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
 
-  # checks----------------------------------------------------------------------
+  # checks----
   if (!is(x,'TDAobj'))
     stop("'x' argument must be a TDAobj object")
 
-  jaccIndexes <- x@jacc
+  jaccIndexes <- getJacc(x)
 
   # check missing arguments
   if (missing(jaccIndexes))
@@ -76,8 +76,7 @@ checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
   if (any(is.infinite(jaccIndexes)))
     stop("Inf values are not allowed in the 'jaccIndexes' matrix")
 
-  # Power Law Degree distribution (body)----------------------------------------
-
+  # Power Law Degree distribution (body)--
   infoModelRes <- list()
 
   # create the graph
@@ -123,47 +122,15 @@ checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
     }
 
 
-    # plot----------------------------------------------------------------------
+    # plot
     if (showPlot %in% c("yes")) {
 
       # degree distribution plot
-      p1 <- ggplot(dataPlDist) +
-        geom_point(aes(x=k, y=pk), color='blue', size=3) +
-        stat_smooth(data=dataPlDist,
-                    aes(x = k, y = pk),
-                    fill="orange1",
-                    method = "lm",
-                    color="orange",
-                    size=1,
-                    alpha=0.1)+
+      plot_ScaleFreeLaw(dataPlDist, rCorkpk, rCorlogklogpk)
 
-        geom_line(aes(x=k, y=pk), color='purple', linetype = "dashed") +
-        theme_bw()+
-        ggtitle(paste0("Degree distr. (linear scale) --- R = ",
-                       round(rCorkpk[["r"]][2],2))
-        )+
-        theme(plot.title = element_text(size = 10, face = "bold")) +
-        scale_x_continuous(breaks= pretty_breaks())
-
-      p2 <- p1 + scale_x_log10(
-        breaks = trans_breaks("log10", function(x) 10^x),
-        labels = trans_format("log10", math_format(10^.x))
-      ) +
-        scale_y_log10(
-          breaks = trans_breaks("log10", function(x) 10^x),
-          labels = trans_format("log10", math_format(10^.x))
-        ) +
-        annotation_logticks()+
-        ggtitle(paste0("Degree distr. (log-log scale) --- R = ",
-                       round(rCorlogklogpk[["r"]][2],2))
-        )+
-        theme(plot.title = element_text(size = 10, face = "bold"))
-
-
-      show(wrap_plots(p1, p2))
     }
 
-  } else { # else related to if (max(dataPl) >= 5)
+  } else {
 
     infoModelRes[['gamma']] <- NA
     infoModelRes[['corkpk']] <- NA
@@ -229,7 +196,7 @@ checkNetEntropy <- function(outcome_vect) {
   if (any(is.infinite((outcome_vect))))
     stop("Inf values are not allowed in the 'vectFreq'")
 
-  # body -----------------------------------------
+  # body -----
   outcome_vect_r <- round(outcome_vect,0)
   uniq_classes <- unique(sort(outcome_vect_r))
 

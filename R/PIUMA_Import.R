@@ -38,13 +38,6 @@
 #'
 makeTDAobj <- function(df, outcomes) {
 
-  # inner function to standardize data [0; 1]-----------------------------------
-  scaleData_01 <- function(x) {
-    return((x-min(x))/(max(x)-min(x)))
-  }
-
-  '%!in%' <- function(x,y)!('%in%'(x,y))
-
   # checks----------------------------------------------------------------------
   # check missing arguments
 
@@ -66,10 +59,10 @@ makeTDAobj <- function(df, outcomes) {
                       stringsAsFactors = TRUE,
                       row.names = rownames(df))
   # specific checks
-  if (dim(df)[1] <= 10)
+  if (nrow(df) <= 10)
     stop("The n. of 'df' rows must be greater than 10")
 
-  if (dim(df)[2] < 2)
+  if (ncol(df) < 2)
     stop("The n. of 'df' columns must be greater than 2")
 
   if (!all(outcomes %in% colnames(df))) {
@@ -79,7 +72,7 @@ makeTDAobj <- function(df, outcomes) {
   if (any(duplicated(outcomes)))
     stop("duplicated 'outcomes' are not allowed")
 
-  if (length(which(colnames(df) %in% outcomes)) == dim(df)[2])
+  if (length(which(colnames(df) %in% outcomes)) == ncol(df))
     stop("all 'df' columns set as outcomes. Please, consider less outcomes")
 
 
@@ -90,15 +83,14 @@ makeTDAobj <- function(df, outcomes) {
   if (any(is.infinite(as.matrix(df))))
     stop("Inf values in 'df'are not allowed")
 
-  # 'df' splitting (body)-------------------------------------------------------
+  # 'df' splitting
+  indNumInt <- which(vapply(df, is.numeric,logical(1)) |
+                       vapply(df, is.integer,logical(1))
+                     )
 
-  # find numeric columns
-  indNumInt <- which(vapply(df, class, FUN.VALUE = character(1)) %in%
-                       c("numeric", "integer"))
-
-  # find factor columns
-  indFact <- which(vapply(df, class, FUN.VALUE = character(1)) %!in%
-                   c("numeric", "integer"))
+  indFact <- which(!(vapply(df, is.numeric,logical(1)) |
+                       vapply(df, is.integer,logical(1)))
+                   )
 
   ## handle numeric feats
   if(length(indNumInt) == 0){

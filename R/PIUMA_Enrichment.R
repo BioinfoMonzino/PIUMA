@@ -29,7 +29,7 @@
 #'
 tdaDfEnrichment <- function(x, df){
 
-  dfMapper <- x@dfMapper
+  dfMapper <- getDfMapper(x)
   # checks----------------------------------------------------------------------
   # check missing arguments
   if (missing(dfMapper))
@@ -46,15 +46,17 @@ tdaDfEnrichment <- function(x, df){
     stop("'df' argument must be a data.frame")
 
   # specific checks
-  if (dim(dfMapper)[2] != 1)
-    stop("dim(dfMapper)[2] must be equal to 1")
+  if (ncol(dfMapper) != 1)
+    stop("ncol(dfMapper) must be equal to 1")
 
-  if (!all(vapply(dfMapper, class, FUN.VALUE=character(1)) %in% "character"))
-    stop("'dfMapper' elements must be of type 'character'")
+  if (!(all(vapply(dfMapper, is.character,logical(1)))))
+    stop("'dfMapper' variables must be numeric")
 
-  if (!all(vapply(df, class, FUN.VALUE=character(1)) %in%
-           c("numeric", "integer")))
-    stop("'df' variables must be all numeric")
+  if (!(all(vapply(df, is.numeric,logical(1))) |
+        all(vapply(df, is.integer,logical(1))))
+  )
+    stop("'df' variables must be numeric")
+
 
   # check the presence of NA or Inf
   if (any(is.na(dfMapper)))
@@ -69,7 +71,7 @@ tdaDfEnrichment <- function(x, df){
   if (any(is.infinite(as.matrix(df))))
     stop("Inf values are not allowed in the 'df' data.frame")
 
-  # body------------------------------------------------------------------------
+  # body--------------------------------
   dbDataRes <- matrix(nrow = nrow(dfMapper), ncol=ncol(df))
   colnames(dbDataRes) <- colnames(df)
   rownames(dbDataRes) <- rownames(dfMapper)
@@ -87,6 +89,6 @@ tdaDfEnrichment <- function(x, df){
   # add a column with the number of examples for each node
   dbDataRes$size <- nodeSize
 
-  x@node_data_mat <- dbDataRes
+  x <- setNodeDataMat(x, dbDataRes)
   return(x)
 }

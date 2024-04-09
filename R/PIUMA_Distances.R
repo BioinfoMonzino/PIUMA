@@ -27,11 +27,11 @@
 #'
 dfToDistance<-function(x, distMethod=c("euclidean", "gower", "pearson")) {
 
-  # checks----------------------------------------------------------------------
+  # checks-------------
   if (!is(x,'TDAobj'))
     stop("'x' argument must be a TDAobj object")
 
-  df <- x@scaled_data
+  df <- getScaledData(x)
 
   # check missing arguments
   if (missing(df))
@@ -49,10 +49,10 @@ dfToDistance<-function(x, distMethod=c("euclidean", "gower", "pearson")) {
     stop("'distMethod' argument must be character")
 
   # specific checks
-  if (dim(df)[1] < 10)
+  if (nrow(df) < 10)
     stop("n. of 'df' row must be greater than 10")
 
-  if (dim(df)[2] < 2)
+  if (ncol(df) < 2)
     stop("n. of 'df'columns must be greater than 2")
 
   if (length(distMethod) > 1)
@@ -86,8 +86,11 @@ dfToDistance<-function(x, distMethod=c("euclidean", "gower", "pearson")) {
     }
   }
 
-  if ((!all(vapply(df, class,character(1)) %in% c("numeric", "integer"))))
+  if (!(all(vapply(df, is.numeric,logical(1))) |
+        all(vapply(df, is.integer,logical(1))))
+      )
     stop("'df' variables must be numeric")
+
 
   # check the presence of NA or Inf
   if (any(is.na(df)))
@@ -97,7 +100,7 @@ dfToDistance<-function(x, distMethod=c("euclidean", "gower", "pearson")) {
     stop("Inf values are not allowed in the 'df' data.frame")
 
 
-  # distance computation (body)-------------------------------------------------
+  # distance computation (body)-----
   switch(distMethod, "euclidean"={
 
     distance<-dist(df, method=distMethod)
@@ -114,7 +117,7 @@ dfToDistance<-function(x, distMethod=c("euclidean", "gower", "pearson")) {
   }
   )
 
-  x@dist_mat <- dfDist
+  x <- setDistMat(x, dfDist)
 
   return(x)
 

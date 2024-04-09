@@ -79,7 +79,7 @@ dfToProjection <- function(x,
   if (!is(x,'TDAobj'))
     stop("'x' argument must be a TDAobj object")
 
-  df <- x@scaled_data
+  df <- getScaledData(x)
 
   # check missing arguments
   if (missing(df))
@@ -135,15 +135,16 @@ dfToProjection <- function(x,
     stop("'vectColor' argument must be: factor, numeric, integer or NULL")
 
   # specific checks
-  if (dim(df)[1] < 10)
+  if (nrow(df) < 10)
     stop("num. of 'df' rows must be greater than 10")
 
-  if (dim(df)[2] < 2)
+  if (ncol(df) < 2)
     stop("num. of 'df' columns must be greater than 2")
 
-  if (!all(vapply(df, class, FUN.VALUE = character(1)) %in% c("numeric",
-                                                            "integer")))
-    stop("'df' variables must be all numeric or integer")
+  if (!(all(vapply(df, is.numeric,logical(1))) |
+        all(vapply(df, is.integer,logical(1))))
+  )
+    stop("'df' variables must be numeric")
 
   if (length(method) > 1)
     stop("length(method) must be equal to 1")
@@ -159,7 +160,7 @@ dfToProjection <- function(x,
   if ((nComp %%1) != 0)
     stop("'nComp' must be integer")
 
-  if (!(nComp >= 2 & nComp <= dim(df)[2]))
+  if (!(nComp >= 2 & nComp <= ncol(df)))
     stop("'nComp' must be lower than the number of 'df' columns")
 
   if (method %in% "UMAP"){
@@ -170,7 +171,7 @@ dfToProjection <- function(x,
       stop("'umapNNeigh' must be integer")
 
 
-    if (!(umapNNeigh >= 2 & umapNNeigh <= round(dim(df)[1])/4))
+    if (!(umapNNeigh >= 2 & umapNNeigh <= round(nrow(df))/4))
       stop("'umapNNeigh' must be in [2; N/4], with N = n. of 'df' rows")
 
     if (length(umapMinDist) > 1)
@@ -188,7 +189,7 @@ dfToProjection <- function(x,
     if ((tsnePerpl %% 1) != 0)
       stop("'tsnePerpl' must be integer")
 
-    if (!(tsnePerpl >= 3 & tsnePerpl <= round(dim(df)[1])/3))
+    if (!(tsnePerpl >= 3 & tsnePerpl <= round(nrow(df))/3))
       stop("'tsnePerpl' must be in [3; N/3], with N = n. of 'df' rows")
 
     if (length(tsneMaxIter) > 1)
@@ -235,7 +236,7 @@ dfToProjection <- function(x,
     if ((isomNNeigh %% 1) != 0)
       stop("'isomNNeigh' must be integer")
 
-    if (!(isomNNeigh >= 2 & isomNNeigh <= round( (dim(df)[1])/4) ))
+    if (!(isomNNeigh >= 2 & isomNNeigh <= round( (nrow(df))/4) ))
       stop("'isomNNeigh' must be in [2; N/4], with N = n. of 'df' rows")
   }
 
@@ -243,7 +244,7 @@ dfToProjection <- function(x,
     stop("length(showPlot) must be equal to 1")
 
   if(!is.null(vectColor)){
-    if(length(vectColor) != dim(df)[1]){
+    if(length(vectColor) != nrow(df)){
       stop("length(vectColor) is different from the number of df rows")
     }
   }
@@ -263,11 +264,7 @@ dfToProjection <- function(x,
       warning("Inf values are not allowed in 'vectColor'")
   }
 
-  # compute the projection (body)-----------------------------------------------
-  s <- cbind(method, "is working to reduce", dim(df)[2])
-  s <- cbind(s, "variables in", nComp, "components")
-  message(s, "\n")
-
+  # compute the projection (body)----------
   switch(method, "PCA"={
 
     pcaRes <- prcomp(df, center = centerPCA, scale. = scalePCA, rank.= nComp)
@@ -279,7 +276,7 @@ dfToProjection <- function(x,
     s <- paste0("comp", vectNumComp, " = ", explVar[seq_len(nComp)], "%",
                 collapse=", ")
     s <- strsplit(s, split=", ", fixed=TRUE)
-    message("PCA explained variance: ", unlist(s), sep="\n")
+
 
   },"UMAP"={
 
@@ -342,48 +339,15 @@ dfToProjection <- function(x,
 
   })
 
-  # set 'allCmp' column names
-  colnames(allCmp) <- rep(paste0("comp", seq_len(dim(allCmp)[2])))
+  colnames(allCmp) <- rep(paste0("comp", seq_len(ncol(allCmp))))
   rownames(allCmp) <- rownames(df)
 
-  # scatter plot----------------------------------------------------------------
+  # scatter plot
   if (showPlot){
-    myLegendTitle <- deparse(substitute(vectColor))
-
-    if(is.null(vectColor)){
-      show(
-        ggplot(allCmp, aes(x = comp1, y = comp2)) +
-          geom_point(size = 2, alpha = 0.5, fill = "blue",
-                     color = "black", shape = 21)+
-          theme_bw(base_size = 10) +
-          labs(title = method, x = "Component 1", y = "Component 2",
-               fill = paste0(myLegendTitle, ": "))+
-          theme(plot.title = element_text(hjust = 0.5),
-                legend.position = "right")
-
-      )
-    }else{
-      show(
-        ggplot(allCmp, aes(x = comp1, y = comp2, fill = vectColor)) +
-          geom_point(size = 2, alpha = 0.5, color = "black", shape = 21)+
-          theme_bw(base_size = 10) +
-          labs(title = method, x = "Component 1", y = "Component 2",
-               fill = paste0(myLegendTitle, ": "))+
-          {if (is.factor(vectColor)) {
-            myCols <- c("springgreen1", "red", "yellow", "white", "cyan",
-                        "black", "pink", "blue", "orange")
-            scale_fill_manual(values = myCols)
-          } else {
-            scale_fill_gradientn(colours = rev(rainbow(5)))
-          }}+
-          theme(plot.title = element_text(hjust = 0.5),
-                legend.position = "right")
-
-      )
-    }
+    plot_projection_plot(allCmp, vectColor)
   }
 
-  x@comp <- allCmp
+  x <- setComp(x, allCmp)
 
   return(x)
 }

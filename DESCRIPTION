@@ -1,7 +1,7 @@
 Package: PIUMA
 Type: Package
 Title: Phenotypes Identification Using Mapper from topological data Analysis
-Version: 0.99.6
+Version: 0.99.7
 Authors@R: c(
     person("Mattia", "Chiesa", , "mattia.chiesa@cardiologicomonzino.it", 
 	role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7427-9954")),
@@ -26,7 +26,7 @@ biocViews: Clustering, GraphAndNetwork, DimensionReduction, Network,
      Classification
 VignetteBuilder: knitr
 Imports: cluster, umap, tsne, kernlab, vegan, dbscan, igraph, scales,
-    Hmisc, patchwork, grDevices, stats, methods
+    Hmisc, patchwork, grDevices, stats, methods, SummarizedExperiment
 Suggests: BiocStyle, knitr, testthat, rmarkdown
 Depends: R (>= 4.3), ggplot2
 RoxygenNote: 7.2.3

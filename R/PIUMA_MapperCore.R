@@ -46,12 +46,13 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
                         clustMeth = c("kmeans","HR", "DBSCAN", "OPTICS"),
                         HRMethod = c("average", "complete")) {
 
-  # checks----------------------------------------------------------------------
+  # checks-------------------
   if (!is(x,'TDAobj'))
     stop("'x' argument must be a TDAobj object")
 
-  dfDistances <- x@dist_mat
-  df2Dlens <- x@comp
+  dfDistances <- getDistMat(x)
+  df2Dlens <- getComp(x)
+
   # check missing arguments
   if (missing(dfDistances))
     stop("'dfDistances' argument must be provided")
@@ -93,21 +94,25 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
     stop("'HRMethod' argument must be a string")
 
   # specific checks
-  if (dim(dfDistances)[1] != dim(df2Dlens)[1])
+  if (nrow(dfDistances) != nrow(df2Dlens))
     stop("n. of rows 'dfDistances' must be equal to n. of rows 'df2Dlens'")
 
-  if(dim(df2Dlens)[2] != 2)
-    stop("dim(df2Dlens)[2] must be equal to 2")
+  if(ncol(df2Dlens) != 2)
+    stop("ncol(df2Dlens) must be equal to 2")
 
-  if (dim(dfDistances)[1] < 10 & dim(df2Dlens)[1] < 10)
+  if (nrow(dfDistances) < 10 & nrow(df2Dlens) < 10)
     stop("n. 'dfDistances' and 'df2Dlens' rows greater than 10")
 
-  if (!all(vapply(dfDistances, class,
-                  FUN.VALUE = character(1)) %in% c("numeric","integer")))
+
+  if (!(all(vapply(dfDistances, is.numeric,logical(1))) |
+        all(vapply(dfDistances, is.integer,logical(1))))
+  )
     stop("'dfDistances' variables must be numeric")
 
-  if (!all(vapply(df2Dlens, class, FUN.VALUE = character(1)) %in% c("numeric",
-                                                                    "integer")))
+
+  if (!(all(vapply(df2Dlens, is.numeric,logical(1))) |
+        all(vapply(df2Dlens, is.integer,logical(1))))
+  )
     stop("'df2Dlens' variables must be numeric")
 
   if (!isSymmetric.matrix(as.matrix(dfDistances)))
@@ -171,13 +176,12 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
   if (any(is.infinite(as.matrix(df2Dlens))))
     stop("Inf values are not allowed in the 'df2Dlens' data.frame")
 
-  # initializations-------------------------------------------------------------
+  # initializations----------------------------------
   nBins[2] <- nBins
   pointsInNodeDf <- as.data.frame(matrix(nrow = 0, ncol = 1))
-  # counter for pointsInNodeDf
   k <- 1
 
-  # define the sectors (used in for main loop)----------------------------------
+  # define the sectors (used in for main loop)------------------
 
   minFilt1 <- min(df2Dlens[, 1])
   maxFilt1 <- max(df2Dlens[, 1])
@@ -196,7 +200,7 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
   sectorIdx1 <- rep(seq_len(nBins[1]), nBins[2])
   sectorIdx2 <- rep(seq_len(nBins[2]), each = nBins[1])
 
-  # main loop-------------------------------------------------------------------
+  # main loop-----------------------------------------------------
   for (sector in seq_len(numSectors)) {
 
     sector1 <- sectorIdx1[sector]
@@ -240,7 +244,7 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
 
         # find knn
         knnValY <- sort(kNNdist(sectorDfDistances,
-                                round(log(dim(as.matrix(sectorDfDistances))[1])
+                                round(log(nrow(as.matrix(sectorDfDistances)))
                                       )
                                 )
                         )
@@ -266,13 +270,13 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
 
         clustInSector <- dbscan(sectorDfDistances,
                                 eps = elbow,
-                      minPts = round(log(dim(as.matrix(sectorDfDistances))[1])))
+                      minPts = round(log(nrow(as.matrix(sectorDfDistances)))))
         dfClust <- clustInSector$cluster
 
       }, "OPTICS"={
 
         optClust <- optics(sectorDfDistances,
-                    minPts = round(log(dim(as.matrix(sectorDfDistances))[1])))
+                    minPts = round(log(nrow(as.matrix(sectorDfDistances)))))
         clustInSector <- extractDBSCAN(optClust, eps_cl = (optClust$eps/2))
         dfClust <- clustInSector$cluster
 
@@ -294,15 +298,15 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
       rownames(pointsInNodeDf)[k] <- paste0("node_", sector, "_cl_1")
       k <- k + 1
 
-    } # end if(numPointsInSector > mClustNode)/else
-  }  # end main loop
+    }
+  }
   colnames(pointsInNodeDf) <- "sample_x_cluster"
 
-  # remove empty nodes----------------------------------------------------------
+  # remove empty nodes-----------------------------------
   if (remEmptyNode==TRUE) {
     '%!in%' <- function(x,y)!('%in%'(x,y))
-    pointsInNodeDf <- pointsInNodeDf[which(pointsInNodeDf[,1] %!in% ""),,
-                                     drop=FALSE]
+    pointsInNodeDf <- pointsInNodeDf[
+      which(pointsInNodeDf[,"sample_x_cluster"] %!in% ""),, drop=FALSE]
   }
 
   # remove identical nodes (only shared samples): leave-one-out
@@ -311,12 +315,11 @@ mapperCore <- function (x, nBins = 15, overlap = 0.4,
     idx <- which(pointsInNodeDf$sample_x_cluster %in% uniq_nodes[i])
     if(length(idx) > 1){
       idx_bad <- idx[2:length(idx)]
-      pointsInNodeDf[idx_bad, 1] <- NA
+      pointsInNodeDf[idx_bad, "sample_x_cluster"] <- NA
     }
   }
   pointsInNodeDf <- pointsInNodeDf[complete.cases(pointsInNodeDf),,drop=FALSE]
 
-  x@dfMapper <- pointsInNodeDf
-
+  x <- setDfMapper(x, pointsInNodeDf)
   return(x)
 }
