@@ -10,9 +10,9 @@ scaleData_01 <- function(x) {
 
 # inner function for jaccard computation
 jaccard <- function(a, b) {
-  intersection <- length(intersect(a, b))
-  union <- length(a) + length(b) - intersection
-  return (intersection/union)
+  intersection_j <- length(intersect(a, b))
+  union_j <- length(union(a, b))
+  return (intersection_j/union_j)
 }
 
 #### scale free power law

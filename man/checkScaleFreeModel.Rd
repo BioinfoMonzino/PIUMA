@@ -4,13 +4,12 @@
 \alias{checkScaleFreeModel}
 \title{Assessment of Scale-Free model fitting}
 \usage{
-checkScaleFreeModel(x, showPlot = c("yes", "no"))
+checkScaleFreeModel(x, showPlot = FALSE)
 }
 \arguments{
 \item{x}{A TDAobj object, processed by the  \code{\link{jaccardMatrix}}}
 
-\item{showPlot}{A string indicating whether the plot has to be
-generated or not. Only 'yes' (default) or 'no' are allowed}
+\item{showPlot}{Whether the  plot has to be generated. Default: FALSE}
 }
 \value{
 A list containing:
@@ -35,7 +34,7 @@ and p(k).
 \examples{
 ## use example data:
 data(tda_test_data)
-#netModel <- checkScaleFreeModel(tda_test_data, "no")
+#netModel <- checkScaleFreeModel(tda_test_data)
 
 }
 \seealso{

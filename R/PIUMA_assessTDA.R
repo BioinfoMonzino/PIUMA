@@ -4,8 +4,7 @@
 #'
 #' @param x A TDAobj object, processed by the  \code{\link{jaccardMatrix}}
 #'
-#' @param showPlot A string indicating whether the plot has to be
-#' generated or not. Only 'yes' (default) or 'no' are allowed
+#' @param showPlot Whether the  plot has to be generated. Default: FALSE
 #'
 #' @return A list containing:
 #' \itemize{
@@ -27,7 +26,7 @@
 #' @examples
 #' ## use example data:
 #' data(tda_test_data)
-#' #netModel <- checkScaleFreeModel(tda_test_data, "no")
+#' #netModel <- checkScaleFreeModel(tda_test_data)
 #'
 #' @seealso
 #' \code{\link{makeTDAobj}},
@@ -39,7 +38,7 @@
 #' @export
 #'
 #'
-checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
+checkScaleFreeModel <- function(x, showPlot = FALSE) {
 
   # checks----
   if (!is(x,'TDAobj'))
@@ -51,16 +50,13 @@ checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
   if (missing(jaccIndexes))
     stop("'jaccIndexes' argument must be provided")
 
-  if (missing(showPlot)) {
-    showPlot <- showPlot[2]
-  }
 
   # check the type of argument
   if (!is.matrix(jaccIndexes))
     stop("'jaccIndexes' argument must be a matrix")
 
-  if (!is.character(showPlot))
-    stop("'showPlot' argument must be character")
+  if (!is.logical(showPlot))
+    stop("'showPlot' argument must be TRUE or FALSE")
 
   # specific checks
   if (!all((jaccIndexes >= 0 & jaccIndexes <= 1) | is.na(jaccIndexes)))
@@ -68,9 +64,6 @@ checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
 
   if (length(showPlot) > 1)
     stop("length(showPlot) must be equal to 1")
-
-  if (!(showPlot %in% c("yes", "no")))
-    stop("'showPlot' must be yes or no")
 
   # check the presence of Inf values
   if (any(is.infinite(jaccIndexes)))
@@ -123,8 +116,7 @@ checkScaleFreeModel <- function(x, showPlot=c("yes","no")) {
 
 
     # plot
-    if (showPlot %in% c("yes")) {
-
+    if (showPlot) {
       # degree distribution plot
       plot_ScaleFreeLaw(dataPlDist, rCorkpk, rCorlogklogpk)
 
