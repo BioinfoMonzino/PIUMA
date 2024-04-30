@@ -1,7 +1,7 @@
 Package: PIUMA
 Type: Package
 Title: Phenotypes Identification Using Mapper from topological data Analysis
-Version: 0.99.8
+Version: 1.0.0
 Authors@R: c(
     person("Mattia", "Chiesa", , "mattia.chiesa@cardiologicomonzino.it", 
 	role = c("aut", "cre"), comment = c(ORCID = "0000-0001-7427-9954")),
