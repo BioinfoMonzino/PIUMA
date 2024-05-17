@@ -344,7 +344,7 @@ dfToProjection <- function(x,
 
   # scatter plot
   if (showPlot){
-    plot_projection_plot(allCmp, vectColor)
+    plot_projection_plot(allCmp, vectColor, method)
   }
 
   x <- setComp(x, allCmp)

@@ -76,7 +76,7 @@ checkScaleFreeModel <- function(x, showPlot = FALSE) {
   adjDataRes <- jaccIndexes
   adjDataRes[adjDataRes > 0] <- 1
   graphFromAdjMatr <- graph_from_adjacency_matrix(adjDataRes,
-                                                  mode = "undirected")
+                                                  mode = "max")
 
   # compute the degree and pk
   dataPl <- degree(graphFromAdjMatr, mode="in")

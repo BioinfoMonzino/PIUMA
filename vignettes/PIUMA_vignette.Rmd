@@ -372,13 +372,13 @@ strategies to ass
     to unveil communities in our data. The higher the correlation between P(k)
     and k, in log-log scale, the better the network.
 
-```{r,chunk-8, fig.width=10, fig.height=10,warning=FALSE, eval=FALSE, fig.cap = "Power-law degree distribution. The correlation between P(k) (y-axis) and k (x-axis) is represented in linear scale (on the left) and in log-log scale (on the right). The regression line (orange line) is also provided."}
+```{r,chunk-8, fig.width=10, fig.height=10,warning=FALSE, eval=TRUE, fig.cap = "Power-law degree distribution. The correlation between P(k) (y-axis) and k (x-axis) is represented in linear scale (on the left) and in log-log scale (on the right). The regression line (orange line) is also provided."}
 # Anchoring (supervised)
 entropy <-  checkNetEntropy(getNodeDataMat(TDA_obj)[, "zone"])
 entropy
 
 # Scale free network (unsupervised)
-netModel <- checkScaleFreeModel(TDA_obj, showPlot = "yes")
+netModel <- checkScaleFreeModel(TDA_obj, showPlot = TRUE)
 netModel
 ```
 

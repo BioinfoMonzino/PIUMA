@@ -55,7 +55,7 @@ plot_ScaleFreeLaw <- function(dataPlDist, rCorkpk, rCorlogklogpk){
 }
 
 #### projection plot
-plot_projection_plot <- function(allCmp, vectColor){
+plot_projection_plot <- function(allCmp, vectColor, method){
   myLegendTitle <- deparse(substitute(vectColor))
 
   if(is.null(vectColor)){
